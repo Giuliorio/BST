@@ -55,4 +55,85 @@ class Tree {
 
     return root;
   }
+
+  /**
+   * Inserts a new value into the binary search tree.
+   * Duplicates are ignored (no insertion occurs if value already exists).
+   *
+   * @param {number} data - The value to insert into the tree.
+   * @returns {Node} The updated node after insertion.
+   */
+  insert(data) {
+    return this.#insertRecursive(this.root, data);
+  }
+
+  /**
+   * Recursively inserts a new value into the binary search tree starting from a given node.
+   *
+   * @private
+   * @param {Node|null} root - The current node being examined during recursion.
+   * @param {number} data - The value to insert.
+   * @returns {Node} The updated node after insertion.
+   */
+  #insertRecursive(root, data) {
+    if (root === null) return new Node(data);
+
+    if (root.data === data) return root;
+
+    if (data < root.data) {
+      root.left = this.#insertRecursive(root.left, data);
+    } else if (data > root.data) {
+      root.right = this.#insertRecursive(root.right, data);
+    }
+
+    return root;
+  }
+
+  /**
+   * Deletes a node with the given data from the tree.
+   * @param {number} data - The value to delete.
+   * @returns {Node|null} The new root after deletion.
+   */
+  delete(data) {
+    return this.#deleteRecursive(this.root, data);
+  }
+
+  /**
+   * Recursively deletes a node with the specified data starting from the given root.
+   * @private
+   * @param {Node|null} root - The current root node.
+   * @param {number} data - The value to delete.
+   * @returns {Node|null} The updated root node after deletion.
+   */
+  #deleteRecursive(root, data) {
+    if (root === null) return null;
+
+    if (root.data > data) {
+      root.left = this.#deleteRecursive(root.left, data);
+    } else if (root.data < data) {
+      root.right = this.#deleteRecursive(root.right, data);
+    } else {
+      if (root.left === null) return root.right;
+      if (root.right === null) return root.left;
+
+      let successor = this.#getSuccessor(root);
+      root.data = successor.data;
+      root.right = this.#deleteRecursive(root.right, successor.data);
+    }
+    return root;
+  }
+
+  /**
+   * Finds the in-order successor of the given node (the smallest node in the right subtree).
+   * @private
+   * @param {Node} current - The node to find the successor for.
+   * @returns {Node} The successor node.
+   */
+  #getSuccessor(current) {
+    current = current.right;
+    while (current !== null && current.left !== null) {
+      current = current.left;
+    }
+    return current;
+  }
 }
