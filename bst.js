@@ -216,6 +216,41 @@ class Tree {
   }
 
   /**
+   * Traverses the tree in in-order and calls the callback on each node.
+   * @param {function} callback - Function to execute on each node. Receives the node as an argument.
+   * @throws {Error} Throws if callback is not a function.
+   */
+  inOrderForEach(callback) {
+    if (typeof callback !== 'function') {
+      throw new Error('Callback must be a function');
+    }
+
+    this.#inOrderForEachRecursive(this.root, callback);
+  }
+
+  /**
+   * Recursively processes each node in the queue using in-order traversal.
+   * @param {Node|null} root - Current node in the traversal.
+   * @param {function} callback - Function to execute on each node.
+   * @private
+   */
+  #inOrderForEachRecursive(root, callback) {
+    if (root === null) return;
+
+    if (root.left) this.#inOrderForEachRecursive(root.left, callback);
+
+    try {
+      callback(root);
+    } catch (err) {
+      console.error('Callback failed at node:', root, err);
+    }
+
+    if (root.right) this.#inOrderForEachRecursive(root.right, callback);
+
+    return;
+  }
+
+  /**
    * Prints the entire binary tree starting from the root in a structured, readable format.
    */
   prettyPrint() {
@@ -231,7 +266,7 @@ class Tree {
    * @param {string} [prefix=''] - The prefix string used for indentation and branch lines.
    * @param {boolean} [isLeft=true] - Indicates whether the current node is a left child.
    */
-  #prettyPrintRecursive = (node, prefix = '', isLeft = true) => {
+  #prettyPrintRecursive(node, prefix = '', isLeft = true) {
     if (node === null) {
       return;
     }
@@ -250,5 +285,5 @@ class Tree {
         true
       );
     }
-  };
+  }
 }
