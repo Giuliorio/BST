@@ -214,4 +214,41 @@ class Tree {
 
     this.#levelOrderForEachRecursive(queue, callback);
   }
+
+  /**
+   * Prints the entire binary tree starting from the root in a structured, readable format.
+   */
+  prettyPrint() {
+    this.#prettyPrintRecursive(this.root);
+  }
+
+  /**
+   * Recursively prints the binary tree in a visually structured format to the console.
+   * Displays the right subtree above the root and the left subtree below,
+   * using Unicode characters to show branches and hierarchy.
+   *
+   * @param {Node|null} node - The current node to print.
+   * @param {string} [prefix=''] - The prefix string used for indentation and branch lines.
+   * @param {boolean} [isLeft=true] - Indicates whether the current node is a left child.
+   */
+  #prettyPrintRecursive = (node, prefix = '', isLeft = true) => {
+    if (node === null) {
+      return;
+    }
+    if (node.right !== null) {
+      this.#prettyPrintRecursive(
+        node.right,
+        `${prefix}${isLeft ? '│   ' : '    '}`,
+        false
+      );
+    }
+    console.log(`${prefix}${isLeft ? '└── ' : '┌── '}${node.data}`);
+    if (node.left !== null) {
+      this.#prettyPrintRecursive(
+        node.left,
+        `${prefix}${isLeft ? '    ' : '│   '}`,
+        true
+      );
+    }
+  };
 }
