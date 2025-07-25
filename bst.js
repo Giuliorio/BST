@@ -356,4 +356,33 @@ class Tree {
       );
     }
   }
+
+  /**
+   * Returns the height of the node containing the given value.
+   * Height is defined as the number of edges in the longest path
+   * from the node to a leaf node.
+   *
+   * @param {*} value - The value to find in the tree.
+   * @returns {number|null} The height of the node if found, or null if not found.
+   */
+  height(value) {
+    const node = this.findValue(value);
+    if (!node) return null;
+
+    return this.#getHeightRecursive(node);
+  }
+
+  /**
+   * Recursively calculates the height of a given node.
+   *
+   * @private
+   * @param {Object} root - The starting node.
+   * @returns {number} The height from this node to its deepest leaf.
+   */
+  #getHeightRecursive(root) {
+    if (!root.left && !root.right) return 0;
+    const leftHeight = root.left ? this.#getHeightRecursive(root.left) : 0;
+    const rightHeight = root.right ? this.#getHeightRecursive(root.right) : 0;
+    return 1 + Math.max(leftHeight, rightHeight);
+  }
 }
