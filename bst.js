@@ -286,6 +286,41 @@ class Tree {
   }
 
   /**
+   * Traverses the tree in post-order and calls the callback on each node.
+   * @param {function} callback - Function to execute on each node. Receives the node as an argument.
+   * @throws {Error} Throws if callback is not a function.
+   */
+  postOrderForEach(callback) {
+    if (typeof callback !== 'function') {
+      throw new Error('Callback must be a function');
+    }
+
+    this.#postOrderForEachRecursive(this.root, callback);
+  }
+
+  /**
+   * Recursively processes each node in the queue using post-order traversal.
+   * @param {Node|null} root - Current node in the traversal.
+   * @param {function} callback - Function to execute on each node.
+   * @private
+   */
+  #postOrderForEachRecursive(root, callback) {
+    if (root === null) return;
+
+    if (root.left) this.#postOrderForEachRecursive(root.left, callback);
+
+    if (root.right) this.#postOrderForEachRecursive(root.right, callback);
+
+    try {
+      callback(root);
+    } catch (err) {
+      console.error('Callback failed at node:', root, err);
+    }
+
+    return;
+  }
+
+  /**
    * Prints the entire binary tree starting from the root in a structured, readable format.
    */
   prettyPrint() {
@@ -322,12 +357,3 @@ class Tree {
     }
   }
 }
-
-const tree = new Tree([1, 2, 3, 4, 5, 6, 7]);
-tree.insert(8);
-// tree.insert(13);
-
-// tree.delete(4);
-
-tree.prettyPrint(tree.root);
-tree.preOrderForEach((node) => console.log(node.data));
