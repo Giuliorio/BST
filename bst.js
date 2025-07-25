@@ -136,4 +136,34 @@ class Tree {
     }
     return current;
   }
+
+  /**
+   * Searches for a node with the given data value.
+   *
+   * @param {number} value - The value to search for in the tree.
+   * @returns {TreeNode|null} - The node containing the node if found, or null if not found.
+   */
+  findValue(value) {
+    return this.#findValueRecursive(this.root, value);
+  }
+
+  /**
+   * Recursively searches for a node with the given data starting from the provided root.
+   *
+   * @private
+   * @param {TreeNode|null} root - The current node being examined.
+   * @param {number} value - The value to search for.
+   * @returns {TreeNode|null} - The node if found, otherwise null.
+   */
+  #findValueRecursive(root, value) {
+    if (root === null) return null;
+
+    if (root.data === value) return root;
+
+    if (value < root.data) {
+      return this.#findValueRecursive(root.left, value);
+    } else {
+      return this.#findValueRecursive(root.right, value);
+    }
+  }
 }
