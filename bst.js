@@ -166,4 +166,52 @@ class Tree {
       return this.#findValueRecursive(root.right, value);
     }
   }
+
+  /**
+   * Applies the provided callback to each node in the tree using level-order traversal (breadth-first).
+   *
+   * Traverses the tree starting from the root, visiting each level from left to right.
+   * If the tree is empty, the function returns without invoking the callback.
+   *
+   * @param {function(Object): void} callback - A function to execute on each node.
+   *        Receives the current node as its only argument.
+   * @throws {Error} If the callback is not a function.
+   */
+  levelOrderForEach(callback) {
+    if (typeof callback !== 'function') {
+      throw new Error('Callback must be a function');
+    }
+
+    if (!this.root) return;
+
+    const queue = [this.root];
+    this.#levelOrderForEachRecursive(queue, callback);
+  }
+
+  /**
+   * Recursively processes each node in the queue using level-order traversal.
+   *
+   * Removes the front node from the queue, applies the callback,
+   * then adds its children (if any) to the end of the queue.
+   * Recurses until the queue is empty.
+   *
+   * @param {Object[]} queue - An array acting as a queue of nodes to process.
+   * @param {function(Object): void} callback - The function to execute on each node.
+   *        Assumes it is already validated to be a function.
+   */
+  #levelOrderForEachRecursive(queue, callback) {
+    if (queue.length === 0) return;
+
+    const node = queue.shift();
+    try {
+      callback(node);
+    } catch (err) {
+      console.error('Callback failed at node:', node, err);
+    }
+
+    if (node.left) queue.push(node.left);
+    if (node.right) queue.push(node.right);
+
+    this.#levelOrderForEachRecursive(queue, callback);
+  }
 }
