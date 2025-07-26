@@ -416,10 +416,37 @@ class Tree {
 
     return this.#getDepthRecursive(root.right, value, currentDepth + 1);
   }
+
+  /**
+   * Checks if the binary tree is height-balanced.
+   * A tree is balanced if the height difference between the left and right
+   * subtrees of every node is no more than 1.
+   *
+   * @returns {boolean} True if the tree is balanced, false otherwise.
+   */
+  isBalanced() {
+    return this.#isBalancedRecursive(this.root).isBalanced;
+  }
+
+  /**
+   * Recursively checks whether a subtree is balanced and calculates its height.
+   *
+   * @param {TreeNode|null} root - The current node being checked.
+   * @returns {{ height: number, isBalanced: boolean }}
+   * An object containing the height of the current subtree and whether it's balanced.
+   */
+  #isBalancedRecursive(root) {
+    if (root === null) return { height: 0, isBalanced: true };
+
+    const left = this.#isBalancedRecursive(root.left);
+    const right = this.#isBalancedRecursive(root.right);
+
+    const height = 1 + Math.max(left.height, right.height);
+    const isBalanced =
+      left.isBalanced &&
+      right.isBalanced &&
+      Math.abs(left.height - right.height) <= 1;
+
+    return { height, isBalanced };
+  }
 }
-
-const tree = new Tree([1, 2, 3, 4, 5, 6, 7, 8]);
-
-tree.prettyPrint();
-
-console.log(tree.depth(8));
