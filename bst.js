@@ -385,4 +385,41 @@ class Tree {
     const rightHeight = root.right ? this.#getHeightRecursive(root.right) : 0;
     return 1 + Math.max(leftHeight, rightHeight);
   }
+
+  /**
+   * Returns the depth of the node containing the given value.
+   * Depth is defined as the number of edges from the root to the node.
+   * If the value is not found, returns null.
+   *
+   * @param {*} value - The value to find the depth of.
+   * @returns {number|null} The depth of the node, or null if not found.
+   */
+  depth(value) {
+    return this.#getDepthRecursive(this.root, value);
+  }
+
+  /**
+   * Recursively searches for the value and tracks the depth during traversal.
+   *
+   * @param {Object|null} root - The current node in the traversal.
+   * @param {*} value - The value to search for.
+   * @param {number} currentDepth - The current depth in the traversal.
+   * @returns {number|null} The depth if found, or null.
+   */
+  #getDepthRecursive(root, value, currentDepth = 0) {
+    if (root === null) return null;
+
+    if (root.data === value) return currentDepth;
+
+    const left = this.#getDepthRecursive(root.left, value, currentDepth + 1);
+    if (left !== null) return left;
+
+    return this.#getDepthRecursive(root.right, value, currentDepth + 1);
+  }
 }
+
+const tree = new Tree([1, 2, 3, 4, 5, 6, 7, 8]);
+
+tree.prettyPrint();
+
+console.log(tree.depth(8));
