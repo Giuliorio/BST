@@ -449,4 +449,15 @@ class Tree {
 
     return { height, isBalanced };
   }
+
+  /**
+   * Rebalances the binary search tree by performing an in-order traversal
+   * to get sorted values and rebuilding the tree for optimal balance.
+   */
+  rebalance() {
+    const array = [];
+
+    this.inOrderForEach((node) => array.push(node.data));
+    this.root = this.#buildTree(array);
+  }
 }
